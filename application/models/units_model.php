@@ -39,7 +39,7 @@ class Units_model extends CI_Model {
 			return $result;
 	}
 	public function search($unit){
-		$query = $this->db->query("SELECT units.id, units.unit_no, projects.project FROM units LEFT OUTER JOIN projects ON projects.id = units.projects_id WHERE units.unit_no LIKE '".$unit."%'");
+		$query = $this->db->query("SELECT units.id, units.unit_no, projects.project FROM units LEFT OUTER JOIN projects ON projects.id = units.projects_id WHERE units.type LIKE '".$unit."%'");
 		return $query->result();
 	}
 }

@@ -12,7 +12,7 @@ class Login extends CI_Controller {
 
 	public function index()
 	{	
-		var_dump($this->session->userdata);
+		//var_dump($this->session->userdata);
 		$this->form_validation->set_rules('username', 'Username', 'required|trim|xss_safe');
 		$this->form_validation->set_rules('password', 'Password', 'required|trim|xss_safe');
 		if($this->form_validation->run()==FALSE){
