@@ -13,7 +13,8 @@ class Projects_model extends CI_Model {
 	{
 			$project = $this->input->post('project');
 			$builder = $this->input->post('builder');
-			$this->db->insert('projects', array('builder'=>$builder, 'project'=>$project));
+			$brokerage = $this->input->post('brokerage');
+			$this->db->insert('projects', array('builder'=>$builder, 'project'=>$project, 'brokerage'=>$brokerage));
 			return true;
 	}
 	public function search($project){
@@ -21,7 +22,7 @@ class Projects_model extends CI_Model {
 		return $query->result();
 	}
 	public function get_all_projects(){
-		$query = $this->db->query('SELECT id, project, builder FROM projects');
+		$query = $this->db->query('SELECT id, project, builder, brokerage FROM projects');
 		return $query->result();
 	}
 }

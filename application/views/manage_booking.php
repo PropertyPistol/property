@@ -1,8 +1,9 @@
 <div id="body">
 	<?php echo validation_errors(); ?>
 	<?php echo form_open(); ?>
-	<p>Select a Unit:
+	<p><h2>1. Enter Unit Type</h2>
 	<?php echo form_input(array('name'=>'unit', 'id'=>'unit', 'size'=>'20', 'placeholder'=>'Enter Value', 'autocomplete'=>'off'),set_value('project')); ?></p>
+  <h2>2. Select the Project</h2>
   <div id="serv_resp"></div>
 	<?php echo form_close(); ?>
 </div>

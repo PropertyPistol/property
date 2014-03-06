@@ -78,7 +78,7 @@ class Manage extends CI_Controller {
 		$unit = $this->input->post('unit');
 		$suggestion = $this->units_model->search($unit);
 		foreach ($suggestion as $key => $value) {
-			echo anchor("manage/make_booking/$value->id", $value->unit_no.' by '.$value->project).'<br/>';
+			echo anchor("manage/make_booking/$value->id", $value->project).'<br/>';
 		}
 		
 	}

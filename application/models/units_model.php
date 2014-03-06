@@ -39,7 +39,8 @@ class Units_model extends CI_Model {
 			return $result;
 	}
 	public function search($unit){
-		$query = $this->db->query("SELECT units.id, units.unit_no, projects.project FROM units LEFT OUTER JOIN projects ON projects.id = units.projects_id WHERE units.type LIKE '".$unit."%'");
+		$query = $this->db->query("SELECT  DISTINCT projects.id, projects.project, units.type FROM projects LEFT OUTER JOIN units ON projects.id = units.projects_id WHERE units.is_booked = '0' AND units.type LIKE '".$unit."'");
+		//$return_array = array('' => , );
 		return $query->result();
 	}
 }
