@@ -49,23 +49,20 @@ class Manage extends CI_Controller {
 		
 	}
 	public function add_unit_value($projects_id){
-		$this->form_validation->set_rules('type', 'Unit Type', 'required|xss_safe|max_length[3]');
-		$this->form_validation->set_rules('unit_no', 'Unit Number', 'required');
-		$this->form_validation->set_rules('size', 'Unit Size', 'required|numeric');
-		$this->form_validation->set_rules('basic_rate', 'Basic Rate', 'required|numeric');
-		$this->form_validation->set_rules('floor_rise', 'Floor Rise Cose', 'required|numeric');
-		$this->form_validation->set_rules('plc', 'PLC', 'required|numeric');
-		$this->form_validation->set_rules('rev_rate', 'Revenue Rate', 'required|numeric');
+		$this->form_validation->set_rules('type', 'Unit Type', 'required|xss_safe');
+
+		$this->form_validation->set_rules('size[]', 'Unit Size', 'required|numeric');
 		if($this->form_validation->run()==FALSE){
 			$this->load->view('header');
 			$this->load->view('manage_add_unit_value');
 			$this->load->view('footer');
 		}else{
-			if($this->units_model->enter_data($projects_id)){
-				redirect('manage');
-			}else{
-				echo "There Was Some Error!";
+			$array = $this->input->post('size');
+			$type = $this->input->post('type');
+			foreach ($array as $key => $value) {
+				$this->units_model->enter_data($projects_id, $type, $key+1, $value);
 			}
+			redirect('manage');
 		}
 		
 	}
@@ -74,13 +71,21 @@ class Manage extends CI_Controller {
 		$this->load->view('manage_add_units');
 		$this->load->view('footer');
 	}
+	/*
 	public function search_unit(){
 		$unit = $this->input->post('unit');
 		$suggestion = $this->units_model->search($unit);
 		foreach ($suggestion as $key => $value) {
-			echo anchor("manage/make_booking/$value->id", $value->project).'<br/>';
+			echo anchor("#", $value->project, array('onClick=init($value->id); return false;')).'<br/>';
 		}
 		
+	}*/
+	public function project_booking_search(){
+		$project = $this->input->post('project');
+		$suggestion = $this->projects_model->search($project);
+		foreach ($suggestion as $key => $value) {
+			echo "<a class='disable' onClick=init($value->id) value=$value->id href=\"javascript:void(0)\">$value->project</a><br/>";
+		}
 	}
 	public function booking(){
 		$this->load->view('header');

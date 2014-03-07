@@ -9,34 +9,10 @@ class Units_model extends CI_Model {
 		$this->load->database();
 	}
 
-	public function enter_data($projects_id)
+	public function enter_data($projects_id, $unit_type, $option_id, $option)
 	{
-		$type = $this->input->post('type');
-		$unit_no = $this->input->post('unit_no');
-		$size = $this->input->post('size');
-		$basic_rate = $this->input->post('basic_rate');
-		$car_park = $this->input->post('car_park');
-		$floor_rise = $this->input->post('floor_rise');
-		$plc = $this->input->post('plc');
-		$rev_rate = $this->input->post('rev_rate');
-		$agr_value = $size*$basic_rate + $floor_rise + $plc;
-		$revenue = ($agr_value*$rev_rate)/100;
-		$data = array(
-				'projects_id'	=>	"$projects_id",
-				'type'			=>	"$type",
-				'unit_no'		=>	"$unit_no",
-				'size'			=>	"$size",
-				'basic_rate'	=>	"$basic_rate",
-				'car_park'		=>	"$car_park",
-				'floor_rise'	=>	"$floor_rise",
-				'plc'			=>	"$plc",
-				'agr_value'		=>	"$agr_value",
-				'rev_rate'		=>	"$rev_rate",
-				'revenue'		=>	"$revenue",
-			);
-			$query = $this->db->insert_string('units', $data);
-			$result = $this->db->query($query);
-			return $result;
+		$query = $this->db->insert_string('unit_options', array('project_id' => $projects_id , 'unit_type'=>$unit_type, 'option_id'=>$option_id, 'option'=>$option ));
+		return $this->db->query($query);
 	}
 	public function search($unit){
 		$query = $this->db->query("SELECT  DISTINCT projects.id, projects.project, units.type FROM projects LEFT OUTER JOIN units ON projects.id = units.projects_id WHERE units.is_booked = '0' AND units.type LIKE '".$unit."'");
