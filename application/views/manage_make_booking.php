@@ -23,7 +23,8 @@
         <textarea name='comments' rows='4' cols='50'></textarea>
 
     <h2>3. Enter Executive's Contributions</h2>   
-
+        <h3><a href="#" id="addScnt">Add Another Value</a></h3>
+        <h3><a href="#" id="remScnt">Remove Input Box</a></h3>
     <?php echo form_submit('submit', 'Submit'); ?>
     <?php echo form_close(); ?>
 </div>
