@@ -10,6 +10,8 @@ class Manage extends CI_Controller {
 		$this->load->model('executive_model');
 		$this->load->model('projects_model');
 		$this->load->model('units_model');
+		$this->load->model('invoice_model');
+		$this->load->model('collection_model');
 	}
 
 	public function index()
@@ -71,38 +73,138 @@ class Manage extends CI_Controller {
 		$this->load->view('manage_add_units');
 		$this->load->view('footer');
 	}
-	/*
+	
 	public function search_unit(){
 		$unit = $this->input->post('unit');
 		$suggestion = $this->units_model->search($unit);
-		foreach ($suggestion as $key => $value) {
-			echo anchor("#", $value->project, array('onClick=init($value->id); return false;')).'<br/>';
-		}
-		
-	}*/
+		echo anchor("manage/booking_edit/$suggestion->id", $suggestion->unit_no, array('class'=>'suggestion'));
+	}
 	public function project_booking_search(){
 		$project = $this->input->post('project');
 		$suggestion = $this->projects_model->search($project);
 		foreach ($suggestion as $key => $value) {
-			echo "<a class='disable' onClick=init($value->id) value=$value->id href=\"javascript:void(0)\">$value->project</a><br/>";
+			echo "<a class='disable' onClick=\"init($value->id)\" value=$value->id href=\"javascript:void(0)\">$value->project</a><br/>";
 		}
+	}	
+	public function search_types(){
+		$project_id = $this->input->post('project');
+		$types = $this->units_model->search_all_types($project_id);
+
+			$options = array();
+			foreach ($types as $key => $value) {
+				$options[$value->unit_type] = $value->unit_type;
+			}
+			echo form_dropdown('types', $options);
+		/*$suggestion = $this->projects_model->search($project);
+		foreach ($suggestion as $key => $value) {
+			echo "<a class='disable' onClick=init($value->id) value=$value->id href=\"javascript:void(0)\">$value->project</a><br/>";
+		}*/
 	}
 	public function booking(){
-		$this->load->view('header');
-		$this->load->view('manage_booking');
-		$this->load->view('footer');
-	}
-	public function make_booking($unit_id){
-		$this->load->view('header');
-		$this->load->view('manage_make_booking');
-		$this->load->view('footer');
-	}
-	public function booking_edit(){
-		$this->load->view('header');
-		$this->load->view('manage_booking_edit');
-		$this->load->view('footer');
-	}
+		$this->form_validation->set_rules('project', 'Project', 'required|xss_safe');
+		$this->form_validation->set_rules('types', 'Unit Type', 'required|xss_safe');
+		if($this->form_validation->run()==FALSE){
+			$this->load->view('header');
+			$this->load->view('manage_booking');
+			$this->load->view('footer');
+		}else{
+			$project = $this->input->post('project');
+			$types = $this->input->post('types');
+			$data['executives'] = $this->executive_model->get_all();
 
+			$data['options'] = $this->units_model->get_options($project, $types);
+			$data['types'] = $types;
+			$data['project'] = $project;
+			$this->load->view('header');
+			$this->load->view('manage_make_booking', $data);
+			$this->load->view('footer');
+		}
+		
+	}
+	public function make_booking($project){
+		$revenue_rate = $this->projects_model->get_revenue($project);
+		$type = $this->input->post('types');
+		//$this->units_model->save_data($project, $revenue_rate);
+		$client_name = $this->input->post('client_name');
+		$client_address = $this->input->post('client_address');
+		$client_city = $this->input->post('client_city');
+		$client_email = $this->input->post('client_email');
+		$client_contact = $this->input->post('client_contact');
+		$booking_date = $this->input->post('booking_date');
+		$options = $this->input->post('options');
+		$unit_no = $this->input->post('unit_no');
+		$rate = $this->input->post('rate');
+		$floor_rise = $this->input->post('floor_rise');
+		$plc = $this->input->post('plc');
+		$car_park = $this->input->post('car_park');
+		$car_park_cost = $this->input->post('car_park_cost');
+		$cashback = $this->input->post('cashback');
+		$exec_array = $this->input->post('executive');
+		$contri_array = $this->input->post('contribution');
+		$booking_id = $this->units_model->save_data($project, $revenue_rate, $type, $options, $client_name, $client_address, $client_city, $client_email, $client_contact, $booking_date, $unit_no, $rate, $floor_rise, $plc, $car_park, $car_park_cost, $cashback);
+		foreach ($exec_array as $key => $value) {
+			$this->executive_model->save_contributions($booking_id, $exec_array[$key], $contri_array[$key]);
+			
+		}
+		/*echo $project;
+		echo br();
+		
+		var_dump($this->input->post('executive'));
+		echo br();
+		var_dump($this->input->post('contribution'));
+		$revenue_rate = $this->projects_model->get_revenue($project);
+		echo $revenue_rate;
+		// */
+	}
+	public function incentives(){
+		$this->load->view('header');
+		$this->load->view('manage_incentives');
+		$this->load->view('footer');
+	}
+	public function booking_edit($booking_id){
+		$this->load->view('header');
+		$this->load->view('manage_booking_edit', array('booking_id'=>$booking_id));
+		$this->load->view('footer');
+	}
+	public function booking_details(){
+		$this->load->view('header');
+		$this->load->view('manage_booking_details');
+		$this->load->view('footer');
+
+	}
+	public function add_invoice($booking_id){
+		$this->form_validation->set_rules('invoice_no', 'Invoice Number', 'numeric|required|xss_safe');
+		$this->form_validation->set_rules('invoice', 'Invoice Value', 'numeric|required|xss_safe');
+		$this->form_validation->set_rules('invoice_month', 'Invoice Month', 'required');
+		if($this->form_validation->run()==FALSE){
+			$this->load->view('header');
+			$data['invoices'] = $this->units_model->get_invoices($booking_id);
+			$data['booking_id'] = $booking_id;
+			$this->load->view('manage_add_invoice', $data);
+			$this->load->view('footer');
+		}else{
+			$this->invoice_model->add_invoice($booking_id);
+			redirect('manage');
+		}
+	}
+	public function add_collection($booking_id){
+		$this->form_validation->set_rules('collection_no', 'Collection Number', 'numeric|required|xss_safe');
+		$this->form_validation->set_rules('collection', 'Collection Value', 'numeric|required|xss_safe');
+		$this->form_validation->set_rules('collection_month', 'Collection Value', 'required');
+		$last_net_outstanding = $this->collection_model->get_last_outstanding($booking_id);
+		$booking_amount = $this->units_model->get_booking_amount($booking_id);
+		if($this->form_validation->run()==FALSE){
+			$this->load->view('header');
+			$data['collections'] = $this->units_model->get_collections($booking_id);
+			$data['booking_id'] = $booking_id;
+			$this->load->view('manage_add_collection', $data);
+			$this->load->view('footer');
+		}else{
+			$this->collection_model->add_collection($booking_id, $last_net_outstanding, $booking_amount);
+			redirect('manage');
+		}
+
+	}
 
 }
 ?>

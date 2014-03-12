@@ -11,9 +11,6 @@
 		$(function() {
 		$( "#datepicker" ).datepicker();
 		});
-		function init(project_id){
-		   search(project_id);
-		}
 	</script>
 </head>
 <body>

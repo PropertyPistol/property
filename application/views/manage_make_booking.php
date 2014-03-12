@@ -1,32 +1,81 @@
 <div id="body" style="text-align:justify;">
     <?php echo validation_errors(); ?>
-    <?php echo form_open(); ?>
-    <h2>1. Enter Client's Details</h2>
-    <p>Enter Name: 
-    <?php echo form_input(array('name'=>'type','placeholder'=>'Enter Type in BHK' ,'size'=>'20'),set_value('type')); ?><sub>BHK</sub></p>
-    <p>Enter Email: 
-    <?php echo form_input(array('name'=>'unit_no','placeholder'=>'Enter Unit Number', 'size'=>'50'),set_value('unit_no')); ?></p>
-    <p>Enter Phone: 
-    <?php echo form_input(array('name'=>'size','placeholder'=>'Area in Square Feet', 'size'=>'20'),set_value('size')); ?><sub>Square Feet</sub></p>
-    <p>Enter City: 
-    <?php echo form_input(array('name'=>'basic_rate','placeholder'=>'Rate per Square Feet', 'size'=>'20'),set_value('basic_rate')); ?><sub>Rs. Per Square Feet</sub></p>
-    <p>Enter State: 
-    <?php echo form_checkbox('car_park', '1', FALSE); ?><sub>Yes/No</sub></p>
+    <?php echo form_open("manage/make_booking/$project"); ?>
+    <h2>1. Select Options</h2>
+    <?php 
+        $avail_options = array(); 
+        foreach ($options as $key => $value) {
+            $avail_options[$value->option] = $value->option;
+        }
+        echo 'Available Area Options: '.form_dropdown('options', $avail_options);
 
+    ?>
     <h2>2. Enter Booking Details</h2>
     <p>Select Date of Booking: 
-    <input type="text" id="datepicker" name='booking_date'>
+    <input type="text" id="datepicker" name='booking_date'></p>
+    <p>Enter Unit Number: 
+    <?php echo form_input(array('name'=>'unit_no','placeholder'=>'Unit Number' ,'size'=>'20'),set_value('unit_no')); ?></p>
+    <p>Enter Basic Rate: 
+    <?php echo form_input(array('name'=>'rate','placeholder'=>'Basic Rate' ,'size'=>'20'),set_value('rate')); ?><sub>Rs per Sq. ft.</sub></p>
+    <p>Enter Floor Rise Cost: 
+    <?php echo form_input(array('name'=>'floor_rise','placeholder'=>'Floor Rise Cost', 'size'=>'50'),set_value('floor_rise')); ?><sub>Rs</sub></p>
+    <p>Enter PLC: 
+    <?php echo form_input(array('name'=>'plc','placeholder'=>'PLC', 'size'=>'20'),set_value('plc')); ?><sub>Rs</sub></p>
+    <p>Car Parking: 
+    <?php echo form_checkbox('car_park', '1', FALSE); ?><sub>Yes/No</sub>
+    <?php echo form_input(array('name'=>'car_park_cost','placeholder'=>'Car Parking Cost', 'size'=>'20'),set_value('car_park')); ?><sub>Rs</sub></p>
     <p>Enter Cashback: 
-    <?php echo form_input(array('name'=>'plc','placeholder'=>'Enter PLC', 'size'=>'20'),set_value('plc')); ?><sub>Rs.</sub></p>
+    <?php echo form_input(array('name'=>'cashback','placeholder'=>'Cashback', 'size'=>'20'),set_value('cashback')); ?><sub>Rs</sub></p>
+    <?php echo form_hidden('types', $types); ?>
 
+    <h2>3. Enter Client Details</h2>
+    <p>Enter Name: 
+    <?php echo form_input(array('name'=>'client_name','placeholder'=>'Client Name', 'size'=>'20'),set_value('client_name')); ?></p>
+    <p>Enter Address: 
+    <?php echo form_input(array('name'=>'client_address','placeholder'=>'Client Address', 'size'=>'20'),set_value('client_address')); ?></p>
+    <p>Enter City: 
+    <?php echo form_input(array('name'=>'client_city','placeholder'=>'Client City', 'size'=>'20'),set_value('client_city')); ?></p>
+    <p>Enter E-Mail: 
+    <?php echo form_input(array('name'=>'client_email','placeholder'=>'Client EMail', 'size'=>'20'),set_value('client_email')); ?></p>
+    <p>Enter Contact: 
+    <?php echo form_input(array('name'=>'client_contact','placeholder'=>'Client EMail', 'size'=>'20'),set_value('client_email')); ?></p>
+
+    <h2>4. Enter Executive Contributions</h2>
+    <h3><a href="#" id="addScnt">Add Another Value</a></h3>
+    <h3><a href="#" id="remScnt">Remove Input Box</a></h3>
+    <?php 
+        $exec_options = array();
+        foreach ($executives as $executive) {
+            $exec_options[$executive->id] = $executive->firstname;
+        }
+        ?><div id="p_scents"><p>
+    <?php
+        
+        echo form_dropdown('executive[]', $exec_options,'1',array('id'=>'exec_options')).' '.form_input(array('name'=>'contribution[]','placeholder'=>'Contribution', 'size'=>'20'),set_value('contribution'));
+    ?></p></div>
     <p>Enter Comments: 
-        <textarea name='comments' rows='4' cols='50'></textarea>
-
-    <h2>3. Enter Executive's Contributions</h2>   
-
-    <?php echo form_submit('submit', 'Submit'); ?>
-    <?php echo form_close(); ?>
+        <textarea name='comments' rows='4' cols='50'></textarea></p>
+        <?php echo form_submit('submit', 'Enter Data'); ?>
 </div>
 <script type="text/javascript">
         $("div.header").html("<h1>Make a Booking</h1>");
+        $(function() {
+                var scntDiv = $("#p_scents p");
+                var pscent = $("#p_scents");
+                var i = $('#p_scents p').size() + 1;
+                
+                $('#addScnt').on('click', function() {
+                        scntDiv.clone().appendTo(pscent);
+                        console.log(scntDiv);//$('#p_scents').clone().appendTo(scntDiv);
+                        i++;
+                        return false;
+                });
+                
+                $('#remScnt').on('click', function() { 
+                        if( i > 2 ) {
+                                $('#p_scents p:last').remove();
+                        }
+                        return false;
+                });
+        });
     </script>

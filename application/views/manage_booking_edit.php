@@ -1,13 +1,12 @@
 <div id="body">
+	<?php echo $booking_id; ?>
 	<?php echo validation_errors(); ?>
-	<?php echo form_open(); ?>
-	<p>Enter Project Name: 
-	<?php echo form_input('project',set_value('project'), array('size'=>'70')); ?></p>
-	<p>Enter Builder: 
-	<?php echo form_input('builder',set_value('builder'), array('size'=>'70')); ?></p>
-	<?php echo form_submit('submit', 'Submit'); ?>
-	<?php echo form_close(); ?>
+	<h2>Select an action</h2>	
+	<?php echo anchor("manage/add_invoice/$booking_id", 'Add Invoice'); ?>
+	<?php echo anchor("manage/add_collection/$booking_id", 'Add Collection'); ?>
+	<?php ?>
+	<?php //echo form_close(); ?>
 </div>
 <script type="text/javascript">
-		$("div.header").html("<h1>Add a Project</h1>");
+		$("div.header").html("<h1>Edit a Project</h1>");
 	</script>

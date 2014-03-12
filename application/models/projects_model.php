@@ -25,5 +25,9 @@ class Projects_model extends CI_Model {
 		$query = $this->db->query('SELECT id, project, builder, brokerage FROM projects');
 		return $query->result();
 	}
+	public function get_revenue($project){
+		$query = $this->db->query("SELECT brokerage FROM projects WHERE id LIKE $project");
+		return $query->row()->brokerage;
+	}
 }
 ?>

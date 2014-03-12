@@ -27,5 +27,13 @@ class Executive_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	public function get_all(){
+		$query = $this->db->query("SELECT id, firstname FROM executive");
+		return $query->result();
+	}
+	
+	public function save_contributions($booking_id, $executive, $contribution){
+		$this->db->insert('executive_client_unit_relation', array('unit_id'=>$booking_id, 'executive_id'=>$executive, 'contribution'=>$contribution));
+	}
 }
 ?>
