@@ -12,6 +12,7 @@ class Manage extends CI_Controller {
 		$this->load->model('units_model');
 		$this->load->model('invoice_model');
 		$this->load->model('collection_model');
+		$this->load->model('incentives_model');
 	}
 
 	public function index()
@@ -32,12 +33,26 @@ class Manage extends CI_Controller {
 		$data['projects'] = $this->projects_model->get_all_projects();
 		$this->form_validation->set_rules('project', 'Project Name', 'required|xss_safe|min_length[4]');
 		$this->form_validation->set_rules('builder', 'Builder Name', 'required|xss_safe|min_length[4]');
+		$this->form_validation->set_rules('brokerage', 'Brokerage', 'required|xss_safe|numeric');
+
+
+		$this->form_validation->set_rules('type', 'Unit Type', 'required|xss_safe');
+
+		$this->form_validation->set_rules('size[]', 'Unit Size', 'required|numeric');
+
 		if($this->form_validation->run()==FALSE){
 			$this->load->view('header');
 			$this->load->view('manage_add_property', $data);
+			$this->load->view('manage_add_unit_value');
+			$this->load->view('manage_show_added_projects');
 			$this->load->view('footer');
 		}else{
-			$this->projects_model->add_project();
+			$project_id = $this->projects_model->add_project();
+			$array = $this->input->post('size');
+			$type = $this->input->post('type');
+			foreach ($array as $key => $value) {
+				$this->units_model->enter_data($projects_id, $type, $key+1, $value);
+			}
 			redirect('manage');
 		}
 		
@@ -59,11 +74,7 @@ class Manage extends CI_Controller {
 			$this->load->view('manage_add_unit_value');
 			$this->load->view('footer');
 		}else{
-			$array = $this->input->post('size');
-			$type = $this->input->post('type');
-			foreach ($array as $key => $value) {
-				$this->units_model->enter_data($projects_id, $type, $key+1, $value);
-			}
+			
 			redirect('manage');
 		}
 		
@@ -126,6 +137,7 @@ class Manage extends CI_Controller {
 		$type = $this->input->post('types');
 		//$this->units_model->save_data($project, $revenue_rate);
 		$client_name = $this->input->post('client_name');
+		$client_id = $this->input->post('client_id');
 		$client_address = $this->input->post('client_address');
 		$client_city = $this->input->post('client_city');
 		$client_email = $this->input->post('client_email');
@@ -141,11 +153,12 @@ class Manage extends CI_Controller {
 		$cashback = $this->input->post('cashback');
 		$exec_array = $this->input->post('executive');
 		$contri_array = $this->input->post('contribution');
-		$booking_id = $this->units_model->save_data($project, $revenue_rate, $type, $options, $client_name, $client_address, $client_city, $client_email, $client_contact, $booking_date, $unit_no, $rate, $floor_rise, $plc, $car_park, $car_park_cost, $cashback);
+		$booking_id = $this->units_model->save_data($project, $revenue_rate, $type, $options, $client_name, $client_id, $client_address, $client_city, $client_email, $client_contact, $booking_date, $unit_no, $rate, $floor_rise, $plc, $car_park, $car_park_cost, $cashback);
 		foreach ($exec_array as $key => $value) {
 			$this->executive_model->save_contributions($booking_id, $exec_array[$key], $contri_array[$key]);
 			
 		}
+		redirect('manage/booking');
 		/*echo $project;
 		echo br();
 		
@@ -157,8 +170,9 @@ class Manage extends CI_Controller {
 		// */
 	}
 	public function incentives(){
+		$data['executives'] = $this->executive_model->get_all();
 		$this->load->view('header');
-		$this->load->view('manage_incentives');
+		$this->load->view('manage_incentives', $data);
 		$this->load->view('footer');
 	}
 	public function booking_edit($booking_id){
@@ -172,6 +186,97 @@ class Manage extends CI_Controller {
 		$this->load->view('footer');
 
 	}
+	public function add_invoice(){
+		$this->form_validation->set_rules('invoice_no', 'Invoice Number', 'numeric|required|xss_safe');
+		$this->form_validation->set_rules('invoice_serial[]', 'Invoice Serial', 'required|xss_safe|trim');
+		$this->form_validation->set_rules('invoice_amount', 'Invoice Amount', 'numeric|required|xss_safe');
+		$this->form_validation->set_rules('invoice_month', 'Invoice Month', 'required');
+		$this->form_validation->set_rules('booking_id[]', 'Booking Id', 'required|xss_safe|trim');
+		$this->form_validation->set_rules('percent[]', 'Percent', 'required|numeric');
+		if($this->form_validation->run()==FALSE){
+			//$data['invoices'] = $this->units_model->get_invoices($booking_id);
+			//$data['booking_id'] = $booking_id;
+			$data['all_units'] = $this->units_model->get_all_units();
+			$data['invoices'] = $this->invoice_model->get_all_invoice();
+			$this->load->view('header');			
+			$this->load->view('manage_invoice', $data);
+			$this->load->view('footer');
+		}else{
+			$booking_ids = $this->input->post('booking_id');
+			$percent = $this->input->post('percent');
+			foreach ($booking_ids as $key => $value) {
+				$this->invoice_model->add_invoice_data($booking_ids[$key], $percent[$key]);
+			}
+			redirect('manage/add_invoice');
+			/*
+			foreach ($this->input->post('booking_id') as $key => $value) {
+				$this->invoice_model->add_invoice_data($this->input->post('booking_id')[$key], $this->input->post('percent')[$key]);
+			}
+			redirect('manage');
+			*/
+			//$this->invoice_model->add_invoice($booking_id);
+			//redirect('manage');
+		}
+	}
+	public function collection_done($invoice_no){
+		$this->invoice_model->update_invoice($invoice_no);
+		redirect('manage/add_invoice');
+	}
+	public function get_incentive($executive_id){
+		$this->load->view('header');
+		$data['executive_id'] = $executive_id;
+		$this->load->view('manage_get_incentive', $data);
+		if($this->input->post('submit')){
+			$this->get_incentive_data($this->input->post('month'), $executive_id);
+		}
+		$this->load->view('footer');
+	}
+	private function get_incentive_data($month, $executive_id){
+		$user_incentive = $this->incentives_model->get_data($month, $executive_id);
+		$data['incentive_array'] = $user_incentive;
+		$data['executive_id'] = $executive_id;
+		$data['month'] = $month;
+		$this->load->view('manage_show_incentives', $data);
+	}
+	public function freeze_incentive($executive_id,$month,$spot_inc,$first_inc,$second_inc,$third_inc){
+		if($this->incentives_model->freeze_incentive($executive_id,$month,$spot_inc,$first_inc,$second_inc,$third_inc)){
+			redirect('manage');
+		}
+	}
+	public function edit_project($project_id){
+		$data['project_details'] = $this->projects_model->get_array($project_id);
+		$data['projects'] = $this->projects_model->get_all_projects();
+
+		$this->form_validation->set_rules('project', 'Project Name', 'required|xss_safe|min_length[4]');
+		$this->form_validation->set_rules('builder', 'Builder Name', 'required|xss_safe|min_length[4]');
+		$this->form_validation->set_rules('brokerage', 'Brokerage', 'required|xss_safe|numeric');
+		//$this->form_validation->set_rules('type', 'Unit Type', 'required|xss_safe');
+		//$this->form_validation->set_rules('size[]', 'Unit Size', 'required|numeric');
+		
+		if($this->form_validation->run()==FALSE && !$this->input->post('submit')){
+			$this->load->view('header');
+			$this->load->view('manage_edit_project', $data);
+			$this->load->view('footer');
+		}else{
+			$this->projects_model->update_project($project_id);
+			$array = $this->input->post('size');
+			$type = $this->input->post('type');
+			if($array && $type){
+				foreach ($array as $key => $value) {
+					$this->units_model->enter_data($project_id, $type, $key+1, $value);
+				}
+			}
+			
+			redirect('manage');
+		}
+		
+	}
+	public function delete_unit_value($project_id, $uid){
+		$this->units_model->delete_unit_value($project_id, $uid);
+		$this->session->set_flashdata('unit_deletion', 'Successfully removed unit option');
+		redirect("manage/edit_project/$project_id");
+	}
+	/*
 	public function add_invoice($booking_id){
 		$this->form_validation->set_rules('invoice_no', 'Invoice Number', 'numeric|required|xss_safe');
 		$this->form_validation->set_rules('invoice', 'Invoice Value', 'numeric|required|xss_safe');
@@ -205,6 +310,7 @@ class Manage extends CI_Controller {
 		}
 
 	}
+	*/
 
 }
 ?>

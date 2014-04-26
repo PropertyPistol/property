@@ -41,7 +41,7 @@
                 <th>Invoice Month</th>
             </tr>
             <?php foreach ($invoices as $invoice) {
-                echo "<tr><td>$invoice->invoice_no</td><td>$invoice->invoice</td><td>$invoice->invoice_month</td></tr>";
+                echo "<tr><td>$invoice->invoice_no</td><td>$invoice->invoice</td><td>$invoice->invoice_month</td><td>Collection Done</td></tr>";
             } ?>
         </table>
         <?php }else{ ?>

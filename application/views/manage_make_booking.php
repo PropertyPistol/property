@@ -12,7 +12,7 @@
     ?>
     <h2>2. Enter Booking Details</h2>
     <p>Select Date of Booking: 
-    <input type="text" id="datepicker" name='booking_date'></p>
+    <input type="text" class="datepicker" name='booking_date'></p>
     <p>Enter Unit Number: 
     <?php echo form_input(array('name'=>'unit_no','placeholder'=>'Unit Number' ,'size'=>'20'),set_value('unit_no')); ?></p>
     <p>Enter Basic Rate: 
@@ -29,6 +29,8 @@
     <?php echo form_hidden('types', $types); ?>
 
     <h2>3. Enter Client Details</h2>
+    <p>Client Id: 
+    <?php echo form_input(array('name'=>'client_id','placeholder'=>'Client ID', 'size'=>'20'),set_value('client_id')); ?></p>
     <p>Enter Name: 
     <?php echo form_input(array('name'=>'client_name','placeholder'=>'Client Name', 'size'=>'20'),set_value('client_name')); ?></p>
     <p>Enter Address: 

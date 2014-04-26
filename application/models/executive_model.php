@@ -33,7 +33,7 @@ class Executive_model extends CI_Model {
 	}
 	
 	public function save_contributions($booking_id, $executive, $contribution){
-		$this->db->insert('executive_client_unit_relation', array('unit_id'=>$booking_id, 'executive_id'=>$executive, 'contribution'=>$contribution));
+		$this->db->insert('executive_client_unit_relation', array('booking_id'=>$booking_id, 'executive_id'=>$executive, 'contribution'=>$contribution));
 	}
 }
 ?>

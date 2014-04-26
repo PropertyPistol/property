@@ -33,6 +33,7 @@
 		        $('#remScnt').on('click', function() { 
 		                if( i > 2 ) {
 		                        $('#p_scents p:last').remove();
+		                        i--;
 		                }
 		                return false;
 		        });
