@@ -7,9 +7,6 @@
 	<?php echo form_input(array('name'=>'builder', 'size'=>'70'),set_value('builder')); ?></p>
 	<p>Enter Brokerage: 
 	<?php echo form_input(array('name'=>'brokerage', 'size'=>'10'),set_value('brokerage')); ?><sub>%</sub></p>
-	<?php echo form_submit('submit', 'Submit'); ?>
-	<?php echo form_close(); ?>
-
 	
 </div>
 

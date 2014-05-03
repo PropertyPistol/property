@@ -35,5 +35,12 @@ class Executive_model extends CI_Model {
 	public function save_contributions($booking_id, $executive, $contribution){
 		$this->db->insert('executive_client_unit_relation', array('booking_id'=>$booking_id, 'executive_id'=>$executive, 'contribution'=>$contribution));
 	}
+	public function remove_executive_contri($booking_id, $executive_id){
+		if($this->db->query("DELETE FROM executive_client_unit_relation WHERE `booking_id` LIKE '$booking_id' && `executive_id` LIKE '$executive_id'")){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
 ?>

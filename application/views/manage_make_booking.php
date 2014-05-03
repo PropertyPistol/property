@@ -22,8 +22,8 @@
     <p>Enter PLC: 
     <?php echo form_input(array('name'=>'plc','placeholder'=>'PLC', 'size'=>'20'),set_value('plc')); ?><sub>Rs</sub></p>
     <p>Car Parking: 
-    <?php echo form_checkbox('car_park', '1', FALSE); ?><sub>Yes/No</sub>
-    <?php echo form_input(array('name'=>'car_park_cost','placeholder'=>'Car Parking Cost', 'size'=>'20'),set_value('car_park')); ?><sub>Rs</sub></p>
+    <?php echo form_radio('car_park', '1', FALSE, 'onClick="show_car_park_cost();"'); ?><sub>Yes</sub>&nbsp;&nbsp;&nbsp;<?php echo form_radio('car_park', '0', TRUE, 'onClick="fade_car_park_cost();"'); ?><sub>No</sub>
+    <span id="car_park_cost" style="display:none;"><?php echo form_input(array('name'=>'car_park_cost', 'placeholder'=>'Car Parking Cost', 'size'=>'20'),set_value('car_park')); ?><sub>Rs</sub></span></p>
     <p>Enter Cashback: 
     <?php echo form_input(array('name'=>'cashback','placeholder'=>'Cashback', 'size'=>'20'),set_value('cashback')); ?><sub>Rs</sub></p>
     <?php echo form_hidden('types', $types); ?>
@@ -80,4 +80,12 @@
                         return false;
                 });
         });
+    </script>
+    <script>
+    function show_car_park_cost(){
+        $("#car_park_cost").show();
+    }
+    function fade_car_park_cost(){
+        $("#car_park_cost").hide();
+    }
     </script>

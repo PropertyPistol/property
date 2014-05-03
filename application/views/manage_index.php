@@ -8,6 +8,7 @@
 			<!-- <li><h3><?php //echo anchor('manage/booking_details', 'Add More Booking Details'); ?></h3></li> -->
 			<li><h3><?php echo anchor('manage/add_invoice', 'Manage Invoice'); ?></h3></li>
 			<li><h3><?php echo anchor('manage/incentives', 'Give Incentives'); ?></h3></li>
+			<li><h3><a href="<?php echo base_url('upload') ?>">Upload Data File</a></h3></li>
 			
 		</ol>
 	</div>

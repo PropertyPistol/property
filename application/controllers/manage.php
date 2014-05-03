@@ -51,7 +51,7 @@ class Manage extends CI_Controller {
 			$array = $this->input->post('size');
 			$type = $this->input->post('type');
 			foreach ($array as $key => $value) {
-				$this->units_model->enter_data($projects_id, $type, $key+1, $value);
+				$this->units_model->enter_data($project_id, $type, $key+1, $value);
 			}
 			redirect('manage');
 		}

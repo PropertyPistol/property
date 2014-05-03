@@ -1,5 +1,5 @@
 
-<div id="databox" style="margin-top:40px; margin-left:10px;">
+<div id="databox" style="margin-top:20px; margin-left:10px;">
 <label><b>Booking Id: </b></label><?php echo $id; ?><br/>
 <label><b>Project: </b></label><?php echo $all_data[0]->project; ?><br/>
 <label><b>Builder: </b></label><?php echo $all_data[0]->builder; ?><br/>
@@ -35,7 +35,7 @@ if(!$invoice_and_collection){
 	echo "No invoice has been Done for this Booking";
 }else{
 	foreach ($invoice_and_collection as $key => $value) {
-		$due_invoice = $revenue - $invoice_amount;
+		$due_invoice = $revenue - $value->invoice_amount;
 ?>
 <b><?php echo $key+1; ?></b><br/>
 <label><b>Invoice Serial: </b></label><?php echo $value->invoice_serial; ?><br/>
@@ -53,6 +53,7 @@ if(!$invoice_and_collection){
 ?>
 <?php 
 echo br();
+echo anchor("booking/edit/$id", "Edit This Booking");
 echo br();
 echo anchor("booking/reversal/$id", "Reversed Booking", array('onClick'=>"return confirmation();"));
 echo br();

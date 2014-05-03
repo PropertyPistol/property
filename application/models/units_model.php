@@ -56,7 +56,7 @@ class Units_model extends CI_Model {
 		return $query->result_array();
 	}
 	public function get_all_booking_data($id){
-		$query = $this->db->query(" SELECT cb.*,clients.*, projects.*, executive.firstname, ecr.contribution
+		$query = $this->db->query(" SELECT cb.*,clients.*, projects.*, executive.firstname, ecr.contribution, ecr.executive_id
 									FROM client_booking AS cb
 									LEFT OUTER JOIN clients ON clients.id = cb.client_id
 									LEFT OUTER JOIN projects ON projects.id = cb.project_id
@@ -71,6 +71,35 @@ class Units_model extends CI_Model {
 	}
 	public function delete_unit_value($project_id, $uid){
 		$query = $this->db->query("DELETE FROM unit_options WHERE project_id LIKE $project_id AND uid LIKE $uid");
+		return true;
+	}
+	public function update_data($booking_id, $client_name, $client_id, $client_address, $client_city, $client_email, $client_contact, $booking_date, $unit_no){
+		$data = array(
+               'name' => $client_name,
+               'address' => $client_address,
+               'city' => $client_city,
+               'email' => $client_email,
+               'phone' => $client_contact
+            );
+
+			$this->db->where('id', $client_id);
+			$sq = $this->db->update('clients', $data); 
+
+		$booking_data = array(
+				'booking_date' => $booking_date,
+				'unit_no' => $unit_no
+			);
+			$this->db->where('id', $booking_id);
+			$sq1 = $this->db->update('client_booking', $booking_data); 
+			if($sq&&$sq1){
+				return true;
+			}else{
+				return false;
+			}
+	}
+
+	public function delete_booking($id){
+		$query = $this->db->query("DELETE FROM client_booking WHERE id LIKE '$id'");
 		return true;
 	}
 }

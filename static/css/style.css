@@ -40,7 +40,9 @@
 	#body{
 		margin: 0 15px 0 15px;
 	}
-	
+	#body ol li a{
+		text-decoration: none;
+	}
 	p.footer{
 		text-align: right;
 		font-size: 11px;

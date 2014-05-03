@@ -1,6 +1,5 @@
 <div id="body" style="text-align:justify;">
-	<?php echo validation_errors(); ?>
-	<?php echo form_open(); ?>
+	
 	<p><h2>1. Enter Unit Type: </h2>
 	<?php echo form_input(array('name'=>'type','placeholder'=>'Enter Type in BHK' ,'size'=>'20'),set_value('type')); ?></p>
 

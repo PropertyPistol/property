@@ -49,7 +49,7 @@
                 <th>Collection</th>
             </tr>
                 <?php foreach ($invoices as $invoice) {
-                echo "<tr><td>$invoice->invoice_serial</td><td>$invoice->invoice_no</td><td>$invoice->invoice_amount</td><td>$invoice->invoice_month</td><td>".anchor("booking/index/$invoice->booking_id", $invoice->booking_id)."</td><td>$invoice->percent</td>";
+                echo "<tr><td>$invoice->invoice_serial</td><td>$invoice->invoice_no</td><td>$invoice->invoice_amount</td><td>$invoice->invoice_month</td><td>".anchor("booking/view", $invoice->booking_id)."</td><td>$invoice->percent</td>";
                 ?>
                 <td>
                 <?php
