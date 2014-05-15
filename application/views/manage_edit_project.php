@@ -4,28 +4,42 @@
 	<?php $project_id =  $project_details[0]->id; ?>
 	<?php echo validation_errors(); ?>
 	<?php echo form_open(); ?>
-	<p>Project Name: 
+	<p><h2>Project Name: </h2>
 	<?php echo form_input(array('name'=>'project', 'size'=>'70'),$project_details[0]->project); ?></p>
-	<p>Enter Builder: 
+	<p><h2>Enter Builder: </h2>
 	<?php echo form_input(array('name'=>'builder', 'size'=>'70'),$project_details[0]->builder); ?></p>
-	<p>Enter Brokerage: 
+	<p><h2>Enter Brokerage: </h2>
 	<?php echo form_input(array('name'=>'brokerage', 'size'=>'10'),$project_details[0]->brokerage); ?><sub>%</sub></p>
 
 	
-	<p><h2>1. Enter Unit Type: </h2>
-	<?php echo form_input(array('name'=>'type','placeholder'=>'Enter Type in BHK' ,'size'=>'20'),set_value('type')); ?></p>
+	<h2>Enter Unit Size options: </h2>
 
-	<p><h2>2. Enter Unit Size options: </h2>
-		<h3><a href="#" id="addScnt">Add Another Value</a></h3>
-		<h3><a href="#" id="remScnt">Remove Input Box</a></h3>
+		<table id="mastertable">
+			<tr>
+				<td>
+					<b>Enter Unit Type</b>
+				</td>
+				<td>
+					<b>Enter Unit Value</b>
+				</td>
+				<td>
+					<span stlye="float:left; display:inline;"><a class="mastertableanchor" style="display:block; width:100%; height:100%; text-decoration:none; margin-bottom:5px;" href="#" id="addScnt">Add</a></span>
+					<span style="float:left; display:inline;"><a class="mastertableanchor" style="display:block; width:100%; height:100%; text-decoration:none;"href="#" id="remScnt">Remove</a></span>
+				</td>
+			</tr>
+		    <tr id="master_row">
+		       <td> 
+		        	<?php echo form_input(array('name'=>'type[]','placeholder'=>'Enter Type in BHK' ,'size'=>'20'),set_value('type')); ?>
 
-		<div id="p_scents">
-		    <p>
-		        <label for="p_scnts"><input type="text" id="p_scnt" size="20" name="size[]" value="" placeholder="Input Value" /></label>
-		    </p>
-		</div>
-
-	</p>
+		        </td>
+		        <td> 
+		        	<input type="text" id="p_scnt" size="20" name="size[]" placeholder="Input Value in sqft" />
+		        </td>
+		        <td> 
+		        	
+		        </td>
+		    </tr>
+		</table>
 	<?php echo form_submit('submit', 'Submit'); ?>
 	<?php echo form_close(); ?>
 
@@ -68,36 +82,34 @@
 
 
 	</p>
+	<?php echo anchor("manage/delete_project/$project_id", "Delete This Project", array('onClick'=>"return confirmation();")); ?>
 </div>
 
 
 
 
 <script type="text/javascript">
-	$("div.header").html("<h1>Edit a Project</h1>");
-</script>
+		$("div.header").html("<h1>Edit a Project</h1>");
+		$(function() {
+		        var scntDiv = $('#mastertable');
+		        var i = $('#mastertable #master_row').size() + 1;
+		        
+		        $('#addScnt').on('click', function() {
+		                $("#master_row").clone().appendTo(scntDiv);
+		                i++;
+		                return false;
+		        });
+		        
+		        $('#remScnt').on('click', function() { 
+		                if( i > 2 ) {
+		                        $('#mastertable #master_row:last').remove();
+		                        i--;
+		                }
+		                return false;
+		        });
+		});
+	</script>
 
-<script type="text/javascript">
-$("div.header").html("<h1>Add a Unit</h1>");
-$(function() {
-	var scntDiv = $('#p_scents');
-	var i = $('#p_scents p').size() + 1;
-
-	$('#addScnt').on('click', function() {
-		$('<p><label for="p_scnts"><input type="text" id="p_scnt" size="20" name="size[]" value="" placeholder="Input Value" /></label> </p>').appendTo(scntDiv);
-		i++;
-		return false;
-	});
-
-	$('#remScnt').on('click', function() { 
-		if( i > 2 ) {
-			$('#p_scents p:last').remove();
-			i--;
-		}
-		return false;
-	});
-});
-</script>
 
 <script>
 	function confirmation() {

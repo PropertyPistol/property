@@ -42,5 +42,20 @@ class Executive_model extends CI_Model {
 			return false;
 		}
 	}
+	public function check_old_password_validity_for_user($userid, $password){
+		$query = $this->db->query("SELECT password FROM executive WHERE id LIKE '$userid'");
+		$array = $query->row();
+		if($array->password==md5($password)){
+			return 1;
+		}else{
+			return 0;
+		}
+	}
+	public function update_password($userid, $password){
+		$query = $this->db->query("UPDATE  `propertypistol`.`executive` SET  `password` =  '".md5($password)."' WHERE  `executive`.`id` =$userid;");
+	}
+	public function delete_for_booking($booking_id){
+		$query = $this->db->query("DELETE FROM executive_client_unit_relation WHERE `booking_id` LIKE $booking_id ");
+	}
 }
 ?>

@@ -44,8 +44,7 @@
 
 	<!-- baap code -->
 	<h2>Enter Executive Contributions</h2>
-    <h3><a href="#" id="addScnt">Add Another Value</a></h3>
-    <h3><a href="#" id="remScnt">Remove Input Box</a></h3>
+    
     <?php 
         $exec_options = array();
         foreach ($executives as $executive) {
@@ -56,9 +55,10 @@
         
         echo form_dropdown('executive[]', $exec_options,'1',array('id'=>'exec_options')).' '.form_input(array('name'=>'contribution[]','placeholder'=>'Contribution', 'size'=>'20'),set_value('contribution'));
     ?></p></div>
+    <a class='add-button' href="#" id="addScnt">Add</a>
+    <a class='add-button' href="#" id="remScnt">Remove</a>
 
-
-
+    <br/><br/>
 	<!-- //baap code -->
 <?php echo form_submit('submit', 'Submit'); ?>
 <?php echo form_close(); ?>

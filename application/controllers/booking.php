@@ -86,7 +86,22 @@ class Booking extends CI_Controller {
 		redirect("booking/edit/$booking_id");
 	}
 	public function delete_booking($booking_id){
-		$this->units_model->delete_booking($booking_id);
+		if($this->check_admin()){
+			$this->units_model->delete_booking($booking_id);
+			$this->executive_model->delete_for_booking($booking_id);
+			$this->session->set_flashdata('booking_deleted', "<span class='flash'>Booking Deleted!</span>");
+		}else{
+			$this->session->set_flashdata('error', "<span class='flash'>Not Authorized!</span>");
+		}
+		redirect('booking/view');
 	}
+	private function check_admin(){
+		if($this->session->userdata('is_admin')==1){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
+	
 
 }

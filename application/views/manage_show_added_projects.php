@@ -1,4 +1,4 @@
-<h3>Projects Already are: </h3><sub>Click here to edit Project Names to edit them.</sub>
+<h3>Projects Already added are: </h3><sub>Click here to edit Project Names to edit them.</sub>
 	<table width='100%' border='1px'>
 		<tr>
 			<th>Project Name</th>

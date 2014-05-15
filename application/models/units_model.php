@@ -28,13 +28,13 @@ class Units_model extends CI_Model {
 		$query = $this->db->query("SELECT `option_id`, `option` FROM unit_options WHERE `unit_type`='".$types."' AND project_id LIKE '".$project."'");
 		return $query->result();
 	}
-	public function save_data($project, $revenue_rate, $type, $options, $client_name, $client_id, $client_address, $client_city, $client_email, $client_contact, $booking_date, $unit_no, $rate, $floor_rise, $plc, $car_park, $car_park_cost, $cashback){
+	public function save_data($project, $revenue_rate, $type, $options, $client_name, $client_id, $client_address, $client_city, $client_email, $client_contact, $booking_date, $unit_no, $rate, $floor_rise, $plc, $car_park, $car_park_cost, $cashback, $comments){
 		$agr_value = $options*$rate+$floor_rise+$plc+$car_park_cost;
 		$revenue = $agr_value*$revenue_rate*.01;
 		$net_revenue = $revenue-$cashback;
 		$this->db->insert('clients', array('name'=>$client_name, 'clients_id'=>$client_id, 'date'=>$booking_date, 'email'=>$client_email, 'phone'=>$client_contact, 'city'=>$client_city, 'address'=>$client_address));
 		$client_id = $this->db->insert_id();
-		$this->db->insert('client_booking', array('client_id' => $client_id, 'project_id'=>$project, 'booking_date'=>$booking_date, 'unit_no'=>$unit_no, 'unit_type'=>$type, 'size'=>$options, 'basic_rate'=>$rate, 'car_park'=>$car_park, 'car_park_cost'=>$car_park_cost, 'floor_rise'=>$floor_rise, 'plc'=>$plc, 'agr_value'=> $agr_value, 'revenue'=>$revenue, 'cashback'=>$cashback, 'net_revenue'=>$net_revenue));
+		$this->db->insert('client_booking', array('client_id' => $client_id, 'project_id'=>$project, 'booking_date'=>$booking_date, 'unit_no'=>$unit_no, 'unit_type'=>$type, 'size'=>$options, 'basic_rate'=>$rate, 'car_park'=>$car_park, 'car_park_cost'=>$car_park_cost, 'floor_rise'=>$floor_rise, 'plc'=>$plc, 'agr_value'=> $agr_value, 'revenue'=>$revenue, 'cashback'=>$cashback, 'net_revenue'=>$net_revenue, 'comments'=>$comments));
 		$booking_id = $this->db->insert_id();
 		return $booking_id;
 		//***********************client info****************

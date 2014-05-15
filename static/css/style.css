@@ -63,3 +63,26 @@
 	.header{
 		margin-left: 40%;
 	}
+	.mastertableanchor{
+		padding: 0px;
+		background-color: #666;
+		border: 1px solid #333;
+		color: #FFF;
+		padding: 1px;
+		text-align: center;
+	}
+	table#mastertable td{
+		padding-right: 40px;
+	}
+	span.flash{
+		background: yellow;
+	}
+	a.add-button{
+		width: 100%;
+		height: 100%;
+		background: #999;
+		border: 1px solid #666;
+		text-align: center;
+		text-decoration: none;
+		color: #FFF;
+	}

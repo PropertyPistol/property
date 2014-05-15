@@ -24,7 +24,11 @@
 	<div style="float:left; padding-left:50px;">
 		<br/><sub><?php echo anchor('manage', 'Back to Main Page'); ?></sub>
 	</div>
-	<div style="float:right; padding-right:150px;">
+	<div style="float:right; padding-right:50px;">
 		<br/><sub><?php echo anchor('manage/logout', 'Logout!'); ?></sub>
 	</div>
+	<div style="float:right; padding-right:650px;">
+		<br/><sub><?php echo anchor('manage/account', 'Change Password'); ?></sub>
+	</div>
+	
 	<div class="clear"></div>

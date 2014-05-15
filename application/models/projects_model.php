@@ -44,5 +44,10 @@ class Projects_model extends CI_Model {
 			$this->db->update('projects', $data); 
 			return true;
 	}
+	public function delete_entry($id){
+		if($this->db->query("DELETE FROM projects WHERE id LIKE '$id'")){
+			return TRUE;
+		}
+	}
 }
 ?>
